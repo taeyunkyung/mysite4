@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rboard">
+	
+	<select id="selectList" resultType="RboardVo">
+		<![CDATA[
+			select  rb.no no,
+        			title,
+        			name,
+       			 	hit,
+        			to_char(reg_date, 'YY-MM-DD HH24:MI') regDate,
+        			user_no userNo,
+        			group_no groupNo,
+        			order_no orderNo,
+        			depth
+			from rboard rb, users us
+			where rb.user_no = us.no
+			order by group_no desc, order_no asc
+		]]>
+	</select>
+	
+	<select id="readOne" parameterType="int" resultType="RboardVo">
+		<![CDATA[
+		select  name,
+        		rb.no no,
+        		user_no userNo,
+        		hit,
+        		to_char(reg_date, 'YY-MM-DD HH24:MI') regDate,
+        		title,
+        		content
+		from rboard rb, users us
+		where rb.user_no = us.no
+		and rb.no = #{no}
+		]]>
+	</select>
+	
+	<update id="hit" parameterType="int">
+		<![CDATA[
+		update rboard
+		set hit = hit + 1
+		where no = #{no}
+		]]>
+	</update>
+	
+	<insert id="insertFirst" parameterType="RboardVo">
+		<![CDATA[
+			insert into rboard
+			values(seq_rboard_no.nextval, #{userNo}, #{title}, #{content}, 0, sysdate, 
+					seq_rgroup_no.nextval, 1, 0)
+		]]>
+	</insert>
+	
+	<select id="replySet" parameterType="int" resultType="RboardVo">
+		<![CDATA[
+			select  group_no groupNo,
+					order_no orderNo,
+        			depth
+			from rboard
+			where no = #{no}
+		]]>
+	</select>
+	
+	<update id="orderUpdate" parameterType="rboardVo">
+		<![CDATA[
+			update rboard
+			set    order_no = order_no + 1
+			where order_no >= #{orderNo} + 1
+			and group_no = #{groupNo}
+		]]>
+	</update>
+		
+	<insert id="insertReply" parameterType="RboardVo">
+		<![CDATA[
+			insert into rboard
+			values(seq_rboard_no.nextval, #{userNo}, #{title}, #{content}, 0, sysdate, 
+					#{groupNo}, #{orderNo}+1, #{depth}+1)
+		]]>
+	</insert>	
+	
+	<delete id="delete" parameterType="int">
+		<![CDATA[
+			delete from rboard
+			where no = #{no}
+		]]>
+	</delete>
+	
+	<update id="deleteUpdate" parameterType="int">
+		<![CDATA[
+			update rboard
+			set title = '삭제된 댓글입니다.'
+			where no = #{no}
+		]]>
+	</update>
+	
+	<update id="update" parameterType="RboardVo">
+		<![CDATA[
+			update rboard
+			set title = #{title},
+    			content = #{content}
+			where no = #{no}
+		]]>
+	</update>
+	
+</mapper>
