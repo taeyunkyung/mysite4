@@ -30,6 +30,15 @@ public class GuestbookService {
 		return count;
 	}
 	
+	public GuestbookVo addReturnVo(GuestbookVo guestbookVo) {
+		System.out.println("mysite4/GuestbookService.addReturnVo()");
+		
+		guestbookDao.insertSelectKey(guestbookVo);
+		int no = guestbookVo.getNo();		
+		
+		return guestbookDao.selectGuest(no);
+	}
+	
 	public int delete(GuestbookVo guestbookVo) {
 		System.out.println("mysite4/GuestbookService.delete()");
 		

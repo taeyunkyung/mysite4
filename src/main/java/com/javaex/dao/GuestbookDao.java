@@ -23,6 +23,21 @@ public class GuestbookDao {
 		System.out.println(count + "건 등록되었습니다.(GuestbookDao)");
 		return count;
 	}
+	
+	// addReturn //
+	public int insertSelectKey(GuestbookVo guestbookVo) {
+		System.out.println("mysite4/GuestbookDao.insertSelectKey()");		
+		
+		return sqlSession.insert("guestbook.insertSelectKey", guestbookVo);
+	}
+	
+	public GuestbookVo selectGuest(int no) {
+		System.out.println("mysite4/GuestbookDao.selectGuest()");
+		
+		GuestbookVo guestbookVo = sqlSession.selectOne("guestbook.selectByNo", no);
+		return guestbookVo;
+	}
+	// addReturn //
 
 	// 삭제
 	public int delete(GuestbookVo guestbookVo) {

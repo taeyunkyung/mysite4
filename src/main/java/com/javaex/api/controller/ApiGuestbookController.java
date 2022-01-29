@@ -1,0 +1,48 @@
+package com.javaex.api.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.javaex.service.GuestbookService;
+import com.javaex.vo.GuestbookVo;
+
+@Controller
+@RequestMapping("/api/guestbook")
+public class ApiGuestbookController {
+	
+	@Autowired
+	private GuestbookService guestbookService;
+	
+	@RequestMapping("/addList")
+	public String addList() {
+		System.out.println("ApiGuestbookController.addList()");
+		
+		return "aguestbook/addList";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/list")
+	public List<GuestbookVo> list() {
+		System.out.println("ApiGuestbookController.list()");
+		
+		List<GuestbookVo> guestList = guestbookService.list();
+		System.out.println(guestList);
+		
+		return guestList;
+	}
+
+	@ResponseBody
+	@RequestMapping("/add")
+	public GuestbookVo add(@ModelAttribute GuestbookVo guestbookVo) {
+		System.out.println("ApiGuestbookController.add()");
+		
+		GuestbookVo guest = guestbookService.addReturnVo(guestbookVo);
+		
+		return guest;
+	}
+}
