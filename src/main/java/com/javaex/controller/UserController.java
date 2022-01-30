@@ -87,8 +87,10 @@ public class UserController {
 						 HttpSession session) {
 		System.out.println("mysite4/UserController>modify");
 		
-		userService.modify(userVo);
 		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		int no = authUser.getNo();
+		userVo.setNo(no);
+		userService.modify(userVo);
 		authUser.setName(userVo.getName());
 		
 		return "redirect:/main";

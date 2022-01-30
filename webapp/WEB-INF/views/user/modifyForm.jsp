@@ -44,8 +44,7 @@
 				<div id="user">
 					<div id="modifyForm">
 						<form action="${pageContext.request.contextPath}/user/modify" method="get">
-						<input type="hidden" name="no" value="${userVo.no}">
-
+						
 							<!-- 아이디 -->
 							<div class="form-group">
 								<label class="form-text" for="input-uid">아이디</label> <span
