@@ -2,6 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="user">
+	
+	<select id="usedIdList" parameterType="String" resultType="UserVo">
+		<![CDATA[
+			select  no,
+        			id
+			from users
+			where id like #{keyword}
+		]]>
+	</select>
 
 	<insert id="insert" parameterType="UserVo">
 		<![CDATA[

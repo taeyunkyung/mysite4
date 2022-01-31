@@ -1,6 +1,7 @@
 package com.javaex.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -14,6 +15,14 @@ public class UserDao {
 
 	@Autowired
 	private SqlSession sqlSession;
+	
+	// 아이디 중복확인	
+	public List<UserVo> usedIdList(String keyword) {
+		System.out.println("mysite4/UserDao.usedIdList()");
+		
+		List<UserVo> usedIdList = sqlSession.selectList("user.usedIdList", keyword);
+		return usedIdList;
+	}
 
 	// 가입
 	public int insert(UserVo userVo) {

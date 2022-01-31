@@ -8,6 +8,8 @@
 <title>My Site</title>
 <link href="${pageContext.request.contextPath}/assets/css/mysite.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/assets/css/user.css" rel="stylesheet" type="text/css">
+
+<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery-1.12.4.js"></script>
 </head>
 
 <body>
@@ -49,7 +51,8 @@
 							<div class="form-group">
 								<label class="form-text" for="input-uid">아이디</label> 
 								<input type="text" id="input-uid" name="id" value="" placeholder="아이디를 입력하세요">
-								<button type="button" id="">중복체크</button>
+								<button type="button" id="btnAvail">중복체크</button>
+								<p id="message"></p>
 							</div>
 	
 							<!-- 비밀번호 -->
@@ -105,4 +108,34 @@
 	<!-- //wrap -->
 
 </body>
+
+<script type="text/javascript">
+	
+	$("#btnAvail").on("click", function() {
+		console.log("버튼클릭");
+		var keyword = $("#input-uid").val();
+		
+		$.ajax({			
+			url : "${pageContext.request.contextPath}/user/availability",		
+			type : "post",
+			// contentType : "application/json",
+			data : {keyword: keyword},
+
+			dataType : "json",
+			success : function(availability){
+				console.log(availability);				
+				
+				if(availability == true) {
+					$("#message").html('<p align="center">사용가능한 아이디입니다.</p>');
+				} else {
+					$("#message").html('<p align="center">사용불가능한 아이디입니다. 다시 입력해주세요.</p>');
+				}								
+			},
+			error : function(XHR, status, error) {
+				console.error(status + " : " + error);
+			}				
+		});
+	});
+
+</script>
 </html>

@@ -1,5 +1,7 @@
 package com.javaex.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,18 @@ public class UserService {
 
 		UserVo authUser = userDao.getUser(id, password);
 		return authUser;
+	}
+	
+	public boolean availability(String keyword) {
+		System.out.println("mysite4/UserService.availability()");
+		boolean availability = false;
+		
+		List<UserVo> usedIdList = userDao.usedIdList(keyword);
+		if(usedIdList.isEmpty() == true) {
+			availability = true;
+		}
+		
+		return availability;
 	}
 
 	public int join(UserVo userVo) {
