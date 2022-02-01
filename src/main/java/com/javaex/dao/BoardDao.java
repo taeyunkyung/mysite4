@@ -51,10 +51,10 @@ public class BoardDao {
 	}
 
 	// 게시글 삭제
-	public int delete(int no) {
+	public int delete(BoardVo boardVo) {
 		System.out.println("mysite4/BoardDao.delete()");
 
-		int count = sqlSession.delete("board.delete", no);
+		int count = sqlSession.delete("board.delete", boardVo);
 
 		System.out.println(count + "건 삭제되었습니다.(BoardDao)");
 		return count;

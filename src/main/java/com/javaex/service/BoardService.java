@@ -13,7 +13,6 @@ public class BoardService {
 
 	@Autowired
 	private BoardDao boardDao;
-	// private UserDao userDao;
 	
 	public List<BoardVo> list() {
 		System.out.println("mysite4/BoardService.list()");
@@ -22,13 +21,18 @@ public class BoardService {
 		return boardList;
 	}
 	
-	public BoardVo read(int no) {
-		System.out.println("mysite4/BoardService.read()");
+	// @Transactional
+	public BoardVo getBoard(int no, String type) { // modifyForm과 합침
+		System.out.println("mysite4/BoardService.getBoard()");
 		
-		BoardVo boardVo = boardDao.read(no);
-		boardDao.hit(no);
-		
-		return boardVo;
+		if("read".equals(type)) {
+			boardDao.hit(no);
+			BoardVo boardVo = boardDao.read(no);						
+			return boardVo;
+		} else {
+			BoardVo boardVo = boardDao.read(no);						
+			return boardVo;
+		}
 	}
 	
 	public int write(BoardVo boardVo) {
@@ -40,15 +44,15 @@ public class BoardService {
 		return count;
 	}
 	
-	public int delete(int no) {
+	public int delete(BoardVo boardVo) {
 		System.out.println("mysite4/BoardService.delete()");
 		
-		int count = boardDao.delete(no);
+		int count = boardDao.delete(boardVo);
 		System.out.println("(-> BoardService)");
 		
 		return count;
 	}
-	
+		
 	public int modify(BoardVo boardVo) {
 		System.out.println("mysite4/BoardService.modify()");
 		

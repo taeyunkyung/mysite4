@@ -5,7 +5,7 @@
 
 	<select id="selectList" resultType="BoardVo">
 		<![CDATA[
-			select  bo.no no,
+			select  bo.no,
         			title,
         			hit,
         			to_char(reg_date, 'YY-MM-DD HH24:MI') regDate,
@@ -20,7 +20,7 @@
 	<select id="read" parameterType="int" resultType="BoardVo">
 		<![CDATA[
 			select  name,
-					bo.no no,
+					bo.no,
         			user_no userNo,
         			hit,
         			to_char(reg_date, 'YY-MM-DD HH24:MI') regDate,
@@ -47,10 +47,11 @@
 		]]>
 	</insert>
 	
-	<delete id="delete" parameterType="int">
+	<delete id="delete" parameterType="BoardVo">
 		<![CDATA[
 			delete from board
 			where no = #{no}
+			and user_no = #{userNo}
 		]]>
 	</delete>
 	
@@ -60,6 +61,7 @@
 			set title = #{title},
     			content = #{content}
 			where no = #{no}
+			and user_no = #{userNo}
 		]]>
 	</update>
 
