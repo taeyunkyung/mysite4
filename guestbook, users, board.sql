@@ -94,7 +94,12 @@ select  no,
 from users
 where no = 5;
 
-select  bo.no no,
+select  no,
+        id
+from users
+where id like 'keyword';
+
+select  bo.no,
         title,
         hit,
         to_char(reg_date, 'YY-MM-DD HH24:MI') regDate,
@@ -105,7 +110,7 @@ where bo.user_no = us.no
 order by regDate desc;
 
 select  name,
-        bo.no no,
+        bo.no,
         user_no userNo,
         hit,
         to_char(reg_date, 'YY-MM-DD HH24:MI') regDate,
@@ -124,7 +129,8 @@ where no = 2;
 update board
 set title = '',
     content = ''
-where no = '';
+where no = ''
+and user_no = '';
 
 update board
 set hit = hit + 1
@@ -135,4 +141,5 @@ where password = '1234'
 and no = '1';
 
 delete from board
-where no = '1';
+where no = '1'
+and user_no = '';
