@@ -63,7 +63,7 @@
 										rows="5"></textarea></td>
 							</tr>
 							<tr class="button-area">
-								<td colspan="4" class="text-center"><button id="btnSubmit" type="submit">등록</button></td>
+								<td colspan="4" class="text-center"><button id="btnSubmit2" type="submit">등록</button></td>
 							</tr>
 						</tbody>
 					</table>		
@@ -146,6 +146,40 @@
 			}	
 		}); 
 	});
+	
+	$("#btnSubmit2").on("click", function() {
+		console.log("json 전송클릭");
+		var name = $("#input-uname").val();
+		var password = $("#input-pass").val();
+		var content = $("[name='content']").val();
+		
+		var guestbookVo = {
+			name: name,
+			password: password,
+			content: content
+		};
+		
+		console.log(guestbookVo);
+		$.ajax({			
+			url : "${pageContext.request.contextPath}/api/guestbook/add2",		
+			type : "post",
+			contentType : "application/json",
+			data : JSON.stringify(guestbookVo),
+
+			dataType : "json",
+			success : function(guestbookVo){
+				console.log(guestbookVo);
+				render(guestbookVo, "up");
+				
+				$("#input-uname").val("");
+				$("#input-pass").val("");
+				$("[name='content']").val("");
+			},
+			error : function(XHR, status, error) {
+				console.error(status + " : " + error);
+			}	
+		}); 		
+	});	
 	
 	$("#listArea").on("click", ".btnDelPop", function() {
 		var $this = $(this);
