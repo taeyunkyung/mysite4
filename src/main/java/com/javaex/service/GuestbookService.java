@@ -31,7 +31,7 @@ public class GuestbookService {
 	}
 	
 	public GuestbookVo addReturnVo(GuestbookVo guestbookVo) {
-		System.out.println("mysite4/GuestbookService.addReturnVo()");
+		System.out.println("ajax-GuestbookService.addReturnVo()");
 		
 		guestbookDao.insertSelectKey(guestbookVo);
 		int no = guestbookVo.getNo();		
@@ -48,4 +48,15 @@ public class GuestbookService {
 		return count;
 	}
 
+	public String removeGuest(GuestbookVo guestbookVo) {
+		System.out.println("ajax-GuestbookService.removeGuest()");
+		
+		int count = guestbookDao.delete(guestbookVo);
+		
+		if(count>0) {
+			return "success";
+		} else {
+			return "fail";
+		}		
+	}
 }

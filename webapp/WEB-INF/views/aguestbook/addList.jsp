@@ -6,10 +6,12 @@
 <head>
 <meta charset="UTF-8">
 <title>My Site</title>
+<link href="${pageContext.request.contextPath}/assets/bootstrap/css/bootstrap.css" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/assets/css/mysite.css" rel="stylesheet"	type="text/css">
 <link href="${pageContext.request.contextPath}/assets/css/guestbook.css" rel="stylesheet" type="text/css">
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/assets/bootstrap/js/bootstrap.js"></script>
 </head>
 
 <body>
@@ -80,6 +82,28 @@
 		
 	</div>
 	<!-- //wrap -->
+	
+<!-- 삭제모달 -->	
+<div id="delModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">비밀번호를 입력하세요</h4>
+      </div>
+      <div class="modal-body">
+      	비밀번호
+		<input id="modalPassword" type="password" name="password" value="">
+		<input id="modalNo" type="text" name="no" value="">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+        <button id="modalBtnDel" type="button" class="btn btn-danger">삭제</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 </body>
 
 <script type="text/javascript">
@@ -123,6 +147,52 @@
 		}); 
 	});
 	
+	$("#listArea").on("click", ".btnDelPop", function() {
+		var $this = $(this);
+		var no = $this.data("no");		
+		console.log(no);
+		
+		$("#modalPassword").val("");
+		$("#modalNo").val(no);
+		
+		$('#delModal').modal('show');
+	});
+	
+	$("#modalBtnDel").on("click", function() {		
+		var no = $("#modalNo").val();
+		var pw = $("#modalPassword").val();
+		
+		var delInfoVo = {
+			no: no,
+			password: pw
+		}
+		console.log(delInfoVo);
+		
+		$.ajax({			
+			url : "${pageContext.request.contextPath}/api/guestbook/remove",		
+			type : "post",
+			// contentType : "application/json",
+			data : delInfoVo,
+
+			dataType : "json",
+			success : function(state){
+				console.log(state);	
+				
+				if(state === 'success') {					
+					$("#t"+ no).remove();
+					$('#delModal').modal('hide');
+				} else {
+					$('#delModal').modal('hide');
+					alert("비밀번호를 확인하세요");
+				}
+							
+			},
+			error : function(XHR, status, error) {
+				console.error(status + " : " + error);
+			}				
+		}); 	
+	});
+	
 	function fetchList() {
 		$.ajax({			
 			url : "${pageContext.request.contextPath}/api/guestbook/list",		
@@ -146,7 +216,7 @@
 	
 	function render(guestbookVo, updown) {		
 		var str = '';
-		str += '<table class="guestRead">';
+		str += '<table id="t'+ guestbookVo.no +'" class="guestRead">';
 		str += '	<colgroup>';
 		str += '		<col style="width: 10%;">';
 		str += '		<col style="width: 40%;">';
@@ -154,11 +224,10 @@
 		str += '		<col style="width: 10%;">';
 		str += '	</colgroup>';
 		str += '	<tr>';	
-		str += '		<td>'+guestbookVo.no+'</td>';
-		str += '		<td>'+guestbookVo.name+'</td>';
-		str += '		<td>'+guestbookVo.regDate+'</td>';
-		str += '		<td><a';
-		str += '				href="">[삭제]</a></td>';
+		str += '		<td>'+ guestbookVo.no +'</td>';
+		str += '		<td>'+ guestbookVo.name +'</td>';
+		str += '		<td>'+ guestbookVo.regDate +'</td>';
+		str += '		<td><button class="btnDelPop" type="button" data-no="'+ guestbookVo.no +'">삭제</button></td>';
 		str += '	</tr>';	
 		str += '	<tr>';	
 		str += '		<td colspan=4 class="text-left">'+guestbookVo.content+'</td>';
