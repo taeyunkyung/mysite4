@@ -51,8 +51,8 @@
 							<div class="form-group">
 								<label class="form-text" for="input-uid">아이디</label> 
 								<input type="text" id="input-uid" name="id" value="" placeholder="아이디를 입력하세요">
-								<button type="button" id="btnAvail">중복체크</button>
-								<p id="message"></p>
+								<button type="button" id="btn-avail">중복체크</button>
+								<p id="message" align="center"></p>
 							</div>
 	
 							<!-- 비밀번호 -->
@@ -111,7 +111,7 @@
 
 <script type="text/javascript">
 	
-	$("#btnAvail").on("click", function() {
+	$("#btn-avail").on("click", function() {
 		console.log("버튼클릭");
 		var keyword = $("#input-uid").val();
 		
@@ -126,15 +126,32 @@
 				console.log(availability);				
 				
 				if(availability == true) {
-					$("#message").html('<p align="center">사용가능한 아이디입니다.</p>');
+					$("#message").html("사용가능한 아이디입니다.");
 				} else {
-					$("#message").html('<p align="center">사용불가능한 아이디입니다. 다시 입력해주세요.</p>');
+					alert("사용불가능한 아이디입니다. 다시 입력해주세요.")
 				}								
 			},
 			error : function(XHR, status, error) {
 				console.error(status + " : " + error);
 			}				
 		});
+	});
+	
+	$("#btn-submit").on("click", function() {
+		console.log("회원가입버튼 클릭");
+		
+		var id = $("#input-uid").val();
+		var pw = $("#input-pass").val();
+		
+		if(id == null) {
+			alert("아이디를 입력해주세요");
+			return false;
+		}
+		
+		if(pw == null) {
+			alert("비밀번호를 입력해주세요");
+			return false;
+		}
 	});
 
 </script>
