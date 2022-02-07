@@ -65,4 +65,45 @@
 		]]>
 	</update>
 
+	<select id="rownum" parameterType="map" resultType="BoardVo">
+		<![CDATA[
+			select  rt.rn,
+					rt.no,
+        			rt.title,
+       				rt.content,
+        			rt.hit,
+        			rt.regDate,
+        			rt.userNo,
+        			rt.name
+			from (select  rownum rn,
+						  ot.no,
+              			  ot.title,
+              			  ot.content,
+              			  ot.hit,
+              			  ot.regDate,
+              			  ot.userNo,
+              			  ot.name
+      			  from (select  bo.no,
+                    			title, 
+                    			content,
+                    			hit,
+                    			to_char(reg_date, 'YY-MM-DD HH24:MI') regDate,
+                    			us.no userNo,
+                    			name
+            			from board bo, users us
+                  		where bo.user_no = us.no
+            	  		order by reg_date desc) ot
+      			  ) rt
+			where rt.rn >= #{startRnum}
+			and rt.rn < #{endRnum}			
+		]]>
+	</select>
+	
+	<select id="totalCnt" resultType="int">
+		<![CDATA[
+			select count(*)
+			from board bo, users us
+			where bo.user_no = us.no
+		]]>
+	</select>
 </mapper>
