@@ -120,6 +120,40 @@ from board bo, users us
 where bo.user_no = us.no
 and bo.no = 1;
 
+select  rt.rn,
+		rt.no,
+		rt.title,
+		rt.content,
+		rt.hit,
+		rt.regDate,
+		rt.userNo,
+		rt.name
+from (select  rownum rn,
+			  ot.no,
+              ot.title,
+              ot.content,
+              ot.hit,
+              ot.regDate,
+              ot.userNo,
+              ot.name
+      from (select  bo.no,
+                    title, 
+                    content,
+                    hit,
+                    to_char(reg_date, 'YY-MM-DD HH24:MI') regDate,
+                    us.no userNo,
+                    name
+            from board bo, users us
+            where bo.user_no = us.no
+            order by reg_date desc) ot
+      ) rt
+where rt.rn >= 21
+and rt.rn <30;
+
+select count(*)
+from board bo, users us
+where bo.user_no = us.no;
+
 update users
 set password = '1234',
     name = '태윤',
